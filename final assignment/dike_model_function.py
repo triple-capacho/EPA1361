@@ -73,7 +73,7 @@ class DikeNetwork(object):
     def _initialize_rfr_ooi(self, G, dikenodes, steps):
         for s in steps:
             for n in dikenodes:
-                node = G.node[n]
+                node = G.nodes[n]
                 # Create a copy of the rating curve that will be used in the sim:
                 node['rnew'] = deepcopy(node['r'])
 
@@ -83,12 +83,12 @@ class DikeNetwork(object):
                 node['evacuation_costs {}'.format(s)] = []
 
             # Initialize room for the river
-            G.node['RfR_projects {}'.format(s)]['cost'] = 0
+            G.nodes['RfR_projects {}'.format(s)]['cost'] = 0
         return G
 
     def progressive_height_and_costs(self, G, dikenodes, steps):  
         for dike in dikenodes:             
-            node = G.node[dike]
+            node = G.nodes[dike]
             # Rescale according to step and tranform in meters
             for s in steps:
                 node['DikeIncrease {}'.format(s)] *= self.dh
@@ -127,7 +127,7 @@ class DikeNetwork(object):
         for item in kwargs:
             # when item is 'discount rate':
             if 'discount rate' in item:
-                G.node[item]['value'] = kwargs[item]
+                G.nodes[item]['value'] = kwargs[item]
             # the rest of the times you always get a string like {}_{}:
             else:
                 string1, string2 = item.split('_')
@@ -139,7 +139,7 @@ class DikeNetwork(object):
                     # (no project) or 1 (yes project)
                     temporal_step = string2.split(' ')[1]
                     
-                    proj_node = G.node['RfR_projects {}'.format(temporal_step)]
+                    proj_node = G.nodes['RfR_projects {}'.format(temporal_step)]
                     # Cost of RfR project
                     proj_node['cost'] += kwargs[item] * proj_node[string1][
                         'costs_1e6'] * 1e6
@@ -148,26 +148,26 @@ class DikeNetwork(object):
                     for key in proj_node[string1].keys():
                         if key != 'costs_1e6':
                             # Change in rating curve due to the RfR project
-                            G.node[key]['rnew'][:, 1] -= kwargs[item] * proj_node[
+                            G.nodes[key]['rnew'][:, 1] -= kwargs[item] * proj_node[
                                 string1][key]
                 else:
                     # string1: dikename or EWS
                     # string2: name of uncertainty or lever
-                    G.node[string1][string2] = kwargs[item]
+                    G.nodes[string1][string2] = kwargs[item]
                     
         self.progressive_height_and_costs(G, dikelist, self.planning_steps)
 
         # Percentage of people who can be evacuated for a given warning
         # time:
-        G.node['EWS']['evacuation_percentage'] = G.node['EWS']['evacuees'][
-            G.node['EWS']['DaysToThreat']]
+        G.nodes['EWS']['evacuation_percentage'] = G.nodes['EWS']['evacuees'][
+            G.nodes['EWS']['DaysToThreat']]
 
         # Dictionary storing outputs:
         data = {}
         
         for s in self.planning_steps:
             for Qpeak in Qpeaks:
-                node = G.node['A.0']
+                node = G.nodes['A.0']
                 waveshape_id = node['ID flood wave shape']
 
                 time = np.arange(0, node['Qevents_shape'].loc[waveshape_id].shape[0],
@@ -176,9 +176,9 @@ class DikeNetwork(object):
 
                 # Initialize hydrological event:
                 for key in dikelist:
-                    node = G.node[key]
+                    node = G.nodes[key]
 
-                    Q_0 = int(G.node['A.0']['Qout'][0])
+                    Q_0 = int(G.nodes['A.0']['Qout'][0])
 
                     self._initialize_hydroloads(node, time, Q_0)
                     # Calculate critical water level: water above which failure
@@ -191,7 +191,7 @@ class DikeNetwork(object):
                     # Run over each node of the branch:
                     for n in range(0, len(dikelist)):
                         # Select current node:
-                        node = G.node[dikelist[n]]
+                        node = G.nodes[dikelist[n]]
                         if node['type'] == 'dike':
 
                             # Muskingum parameters:
@@ -199,7 +199,7 @@ class DikeNetwork(object):
                             C2 = node['C2']
                             C3 = node['C3']
 
-                            prec_node = G.node[node['prec_node']]
+                            prec_node = G.nodes[node['prec_node']]
                             # Evaluate Q coming in a given node at time t:
                             node['Qin'][t] = Muskingum(C1, C2, C3,
                                                    prec_node['Qout'][t],
@@ -233,12 +233,12 @@ class DikeNetwork(object):
                             node['hbas'][t] = node['cumVol'][t] / float(Area)
 
                         elif node['type'] == 'downstream':
-                            node['Qin'] = G.node[dikelist[n - 1]]['Qout']
+                            node['Qin'] = G.nodes[dikelist[n - 1]]['Qout']
 
                 # Iterate over the network and store outcomes of interest for a
                 # given event
                 for dike in self.dikelist:
-                    node = G.node[dike]
+                    node = G.nodes[dike]
 
                 # If breaches occured:
                     if node['status'][-1] == True:
@@ -248,13 +248,13 @@ class DikeNetwork(object):
 
                         node['deaths {}'.format(s)].append(Lookuplin(node['table'],
                                                     6, 3, np.max(node['wl'])) * (
-                                    1 - G.node['EWS']['evacuation_percentage']))
+                                    1 - G.nodes['EWS']['evacuation_percentage']))
 
                         node['evacuation_costs {}'.format(s)].append(
                                 cost_evacuation(Lookuplin(
                                 node['table'], 6, 5, np.max(node['wl'])
-                                ) * G.node['EWS']['evacuation_percentage'],
-                                G.node['EWS']['DaysToThreat']))
+                                ) * G.nodes['EWS']['evacuation_percentage'],
+                                G.nodes['EWS']['DaysToThreat']))
                     else:
                         node['losses {}'.format(s)].append(0)
                         node['deaths {}'.format(s)].append(0)
@@ -263,12 +263,12 @@ class DikeNetwork(object):
             EECosts = []
             # Iterate over the network,compute and store ooi over all events
             for dike in dikelist:
-                node = G.node[dike]
+                node = G.nodes[dike]
 
                 # Expected Annual Damage:
                 EAD = np.trapz(node['losses {}'.format(s)], self.p_exc)
                 # Discounted annual risk per dike ring:
-                disc_EAD = np.sum(discount(EAD, rate=G.node[
+                disc_EAD = np.sum(discount(EAD, rate=G.nodes[
                         'discount rate {}'.format(s)]['value'], n=self.y_step))
 
                 # Expected Annual number of deaths:
@@ -283,7 +283,7 @@ class DikeNetwork(object):
                          '{}_Dike Investment Costs {}'.format(dike,s
                                               ): node['dikecosts {}'.format(s)]})
 
-            data.update({'RfR Total Costs {}'.format(s): G.node[
+            data.update({'RfR Total Costs {}'.format(s): G.nodes[
                                 'RfR_projects {}'.format(s)]['cost'.format(s)]})
             data.update({'Expected Evacuation Costs {}'.format(s): np.sum(EECosts)})
 

@@ -8,7 +8,7 @@ from funs_dikes import Lookuplin  # @UnresolvedImport
 
 def to_dict_dropna(data):
     return dict((str(k), v.dropna().to_dict())
-                for k, v in pd.compat.iteritems(data))
+                for k, v in data.iteritems())
 
 
 def get_network(plann_steps_max=10):
@@ -44,14 +44,16 @@ def get_network(plann_steps_max=10):
                             names=['project name', 0,1,2,3,4])
     
     for n in steps:
-        G.add_node('RfR_projects {}'.format(n), **to_dict_dropna(projects))
-        G.node['RfR_projects {}'.format(n)]['type'] = 'measure'
+        a = to_dict_dropna(projects)
+        
+        G.add_node('RfR_projects {}'.format(n), **a)
+        G.nodes['RfR_projects {}'.format(n)]['type'] = 'measure'
 
         G.add_node('discount rate {}'.format(n), **{'value': 0})
 
     # Upload evacuation policies:
     G.add_node('EWS', **pd.read_excel('./data/EWS.xlsx').to_dict())
-    G.node['EWS']['type'] = 'measure'
+    G.nodes['EWS']['type'] = 'measure'
 
     # Upload muskingum params:
     Muskingum_params = pd.read_excel('./data/Muskingum/params.xlsx',
@@ -62,29 +64,29 @@ def get_network(plann_steps_max=10):
         # Assign fragility curves, assuming it's the same shape for every
         # location
         dikeid = 50001010
-        G.node[dike]['f'] = np.column_stack((frag_curves.loc[:, 'wl'].values,
+        G.nodes[dike]['f'] = np.column_stack((frag_curves.loc[:, 'wl'].values,
                                              frag_curves.loc[:, dikeid].values))
         # Adjust fragility curves
-        G.node[dike]['f'][:, 0] += calibration_factors.loc[dike].values
+        G.nodes[dike]['f'][:, 0] += calibration_factors.loc[dike].values
 
         # Determine the level of the dike
-        G.node[dike]['dikelevel'] = Lookuplin(G.node[dike]['f'], 1, 0, 0.5)
+        G.nodes[dike]['dikelevel'] = Lookuplin(G.nodes[dike]['f'], 1, 0, 0.5)
 
         # Assign stage-discharge relationships
         filename = './data/rating_curves/{}_ratingcurve_new.txt'.format(dike)
-        G.node[dike]['r'] = np.loadtxt(filename)
+        G.nodes[dike]['r'] = np.loadtxt(filename)
 
         # Assign losses per location:
         name = './data/losses_tables/{}_lossestable.xlsx'.format(dike)
-        G.node[dike]['table'] = pd.read_excel(name, index_col=0).values
+        G.nodes[dike]['table'] = pd.read_excel(name, index_col=0).values
 
         # Assign Muskingum paramters:
-        G.node[dike]['C1'] = Muskingum_params.loc[G.node[dike]['prec_node'], 'C1']
-        G.node[dike]['C2'] = Muskingum_params.loc[G.node[dike]['prec_node'], 'C2']
-        G.node[dike]['C3'] = Muskingum_params.loc[G.node[dike]['prec_node'], 'C3']
+        G.nodes[dike]['C1'] = Muskingum_params.loc[G.nodes[dike]['prec_node'], 'C1']
+        G.nodes[dike]['C2'] = Muskingum_params.loc[G.nodes[dike]['prec_node'], 'C2']
+        G.nodes[dike]['C3'] = Muskingum_params.loc[G.nodes[dike]['prec_node'], 'C3']
             
     # The plausible 133 upstream wave-shapes:
-    G.node['A.0']['Qevents_shape'] = pd.read_excel(
+    G.nodes['A.0']['Qevents_shape'] = pd.read_excel(
         './data/hydrology/wave_shapes.xls', index_col=0)
 
     return G, dike_list, dike_branches, steps
