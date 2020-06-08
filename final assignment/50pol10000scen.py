@@ -18,9 +18,9 @@ ema_logging.log_to_stderr(ema_logging.INFO)
 
 with MultiprocessingEvaluator(dike_model) as evaluator:
     results = evaluator.perform_experiments(scenarios=10000,               #500
-                                            policies=50,
+                                            policies=10,
                                             uncertainty_sampling='mc', reporting_interval=1000)
 
 from ema_workbench import save_results
 
-save_results(results_0, './mc50pol10000scen.tar.gz')
+save_results(results, './mc10pol10000scen.tar.gz')
