@@ -26,7 +26,7 @@ for policy in dike_model.levers:
 
 policies_0 = [Policy('no policy', **{l.name: 0 for l in dike_model.levers})]
 
-n_scen = 100
+n_scen = 1000
 print(n_scen)
 with MultiprocessingEvaluator(dike_model) as evalu:
     sa_results = evalu.perform_experiments(n_scen, policies=policies_0, uncertainty_sampling='sobol', reporting_interval=400)
