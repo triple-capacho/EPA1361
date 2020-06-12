@@ -20,16 +20,29 @@ ema_logging.log_to_stderr(ema_logging.INFO)
 
 dike_model, planning_steps = get_model_for_problem_formulation(5)
 
-for policy in dike_model.levers:
-    print(repr(policy))
+
     
 
-policies_0 = [Policy('no policy', **{l.name: 0 for l in dike_model.levers})]
+# policies_0 = [Policy('no policy', **{l.name: 0 for l in dike_model.levers})]
 
-n_scen = 1000
+# n_scen = 1000
+# print(n_scen)
+# with MultiprocessingEvaluator(dike_model) as evalu:
+#     sa_results = evalu.perform_experiments(n_scen, policies=policies_0, uncertainty_sampling='sobol', reporting_interval=400)
+
+# from ema_workbench import save_results
+# save_results(sa_results, './data/exp/sobolnopol40000scen.tar.gz')
+
+uncertainty = dike_model.uncertainties
+levers = dike_model.levers
+
+dike_model.levers = uncertainty
+dike_model.uncertainty = levers
+
+n_scen = 10
 print(n_scen)
 with MultiprocessingEvaluator(dike_model) as evalu:
-    sa_results = evalu.perform_experiments(n_scen, policies=policies_0, uncertainty_sampling='sobol', reporting_interval=400)
+    sa_results = evalu.perform_experiments(n_scen, policies=25, uncertainty_sampling='sobol', reporting_interval=400)
 
 from ema_workbench import save_results
-save_results(sa_results, './sobolnopol4000scen.tar.gz')
+save_results(sa_results, './data/exp/sobolpol40000scen.tar.gz')
