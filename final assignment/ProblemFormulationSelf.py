@@ -191,6 +191,37 @@ def problem_definition(problem_formulation_id):
                                           function=sum_over, kind=direction))
 
         dike_model.outcomes = outcomes
+        
+    # Disaggregate over locations:
+    elif problem_formulation_id.lower() == 'a4, a5 vars':
+        outcomes = []
+        
+        for dike in function.dikelist:
+            if '4' in dike or '5' in dike:
+                variable_name = []
+                for e in ['Expected Annual Damage', 'Dike Investment Costs']:
+                    variable_name.extend(['{}_{} {}'.format(dike, e, n)
+                                              for n in function.planning_steps])
+
+                outcomes.append(ScalarOutcome('{} Total Costs'.format(dike),
+                                              variable_name=[var for var in variable_name],
+                                              function=sum_over, kind=direction))
+
+                outcomes.append(ScalarOutcome('{}_Expected Number of Deaths'.format(dike),
+                                              variable_name=['{}_Expected Number of Deaths {}'.format(
+                                                      dike, n) for n in function.planning_steps],
+                                              function=sum_over, kind=direction))
+
+            outcomes.append(ScalarOutcome('RfR Total Costs', 
+                                          variable_name=['RfR Total Costs {}'.format(n
+                                                         ) for n in function.planning_steps],
+                                              function=sum_over, kind=direction))
+            outcomes.append(ScalarOutcome('Expected Evacuation Costs', 
+                                          variable_name=['Expected Evacuation Costs {}'.format(n
+                                                         ) for n in function.planning_steps],
+                                              function=sum_over, kind=direction))
+
+        dike_model.outcomes = outcomes
 
     # Disaggregate over time:
     elif problem_formulation_id.lower() == 'vars per planningstep':
