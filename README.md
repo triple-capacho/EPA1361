@@ -3,7 +3,7 @@ This is the hand in for the final assignment of EPA1361 - Model-based decision-m
 
 ## File structure
 The file structure is as seen in the structure format below.
-'''bash
+```bash
 EPA1361
 │   .gitignore
 │   README.md
@@ -146,6 +146,6 @@ EPA1361
     │
     └───source
             EPA1361_Group15_finalAssignment.docx
-'''
+```
 
 The final assignment folder contains the code and everything that the code generated, which is later used in the report. 
