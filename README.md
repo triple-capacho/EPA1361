@@ -12,8 +12,6 @@ EPA1361
 │   │   .gitattributes
 │   │   50pol10000scen.py
 │   │   dike_model_function.py
-│   │   ExplanationOrInformation.ipynb
-│   │   ExploringModel.ipynb
 │   │   FinalRunNeat.ipynb
 │   │   FinalRunNeatOptimization.ipynb
 │   │   funs_dikes.py
@@ -21,12 +19,10 @@ EPA1361
 │   │   funs_generate_network.py
 │   │   funs_hydrostat.py
 │   │   helper.py
-│   │   PerformingExperiments.ipynb
 │   │   ProblemFormulationSelf.py
 │   │   problem_formulation.py
 │   │   README.md
 │   │   sobol.py
-│   │   test.py
 │   │   __init__.py
 │   │
 │   ├───data
@@ -149,3 +145,30 @@ EPA1361
 ```
 
 The final assignment folder contains the code and everything that the code generated, which is later used in the report. 
+
+# Code explanation
+The two main files to be used are FinalRunNeat.ipynb and FinalRunNeatOptimization.ipynb. The first one contains everything up to the sensitivity, whereas the second one only contains the optimization. This is done for readability, as the files would otherwise become incredibly large. 
+
+We have created some helper functions and added those to helper.py, which is already included in both the notebooks. 
+
+We were not able to run the sobol analysis in the jupyter notebook environment, therefore we have made a python file that runs the sobol analysis, with no policies and 25 policies and stores the data. These can be easily run in the command line it python3 is added to your PATH:
+
+> python in path (works on most OS's)
+```shell
+$ python3 /path/to/sobol.py
+```
+
+> python not in path (windows)
+```shel
+$ "/path/to/Python/Python38/python.exe" /path/to/sobol.py
+```
+
+In this same way it is possible to run the 10pol10000scen.py file. This file runs the model with Monte Carlo sampling for 10 policies with each 10.000 scenarios. 
+
+We also created our own problem definitions, but also kept the ones given. We left the given file (problem_formulation.py) in this folder, but added everything in it to our own problem formulation file (ProblemFormulationSelf.py). This file is also called in all our noteobooks and is used to get the problem definitions we want. 
+
+All data that we generate is saved in the ./final assignment/data/exp/ folder. Exp is in this case short for experiments, as the experiment data is stored there. Figures are stored in ./final assignment/Figures/, and tables are stored in ./final assignment/Tables/.  
+
+All other data in /data/ and all other python files were given and are used by the model to run correctly.
+
+#
