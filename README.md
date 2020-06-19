@@ -3,9 +3,9 @@ This is for the submission of final assignment of EPA1361 - Model-based decision
 
 ## Authors
 
-Martijn Ras
-Hongxuan Yu
-Paulus Meerman
+Martijn Ras;
+Hongxuan Yu;
+Paulus Meerman;
 Supriya Krishnan
 
 ## How to
