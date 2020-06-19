@@ -1,5 +1,42 @@
-# EPA1361 Hand-in final assignment
-This is the hand in for the final assignment of EPA1361 - Model-based decision-making. </br>
+# EPA 1361 Final assignment: Flood Risk Management for the IJssel River 
+This is for the submission of final assignment of EPA1361 - Model-based decision-making. </br>
+
+## Authors
+
+Martijn Ras
+Hongxuan Yu
+Paulus Meerman
+Supriya Krishnan
+
+## How to
+
+* The two main files to be used are Exploration.ipynb and Optimization.ipynb. 
+**  Exploration.ipynb contains open explorations, scenario discovery and sensitivity analysis;
+**  Optimization.ipynb contains epsilon-testing, MORDM for average scenarios and MORDM for worst scenarios.
+
+* helper.py has some functions created by us and it is already included in both the notebooks. 
+
+* We were not able to run the sobol analysis in the jupyter notebook environment, therefore we have made a python file that runs the sobol analysis, with no policies and 25 policies and stores the data. These can be easily run in the command line it python3 is added to your PATH:
+
+> python in path (works on most OS's)
+```shell
+$ python3 /path/to/sobol.py
+```
+
+> python not in path (windows)
+```shel
+$ "/path/to/Python/Python38/python.exe" /path/to/sobol.py
+```
+
+In this same way it is possible to run the 10pol10000scen.py file. This file runs the model with Monte Carlo sampling for 10 policies with each 10.000 scenarios. 
+
+* We also created our own problem definitions, but also kept the ones given. We left the given file (problem_formulation.py), but added everything in it to our own problem formulation file (ProblemFormulationSelf.py). This file is also called in all our noteobooks and is used to get the problem definitions we want. 
+
+* All the experiment data that we generate are saved in the ./final assignment/data/exp/. folder;
+* Figures are stored in ./final assignment/Figures/;
+* Tables are stored in ./final assignment/Tables/.  
+
+All other data in /data/ and all other python files were given and are used by the model to run correctly.
 
 ## File structure
 The file structure is as seen in the structure format below.
@@ -143,32 +180,3 @@ EPA1361
     └───source
             EPA1361_Group15_finalAssignment.docx
 ```
-
-The final assignment folder contains the code and everything that the code generated, which is later used in the report. 
-
-# Code explanation
-The two main files to be used are FinalRunNeat.ipynb and FinalRunNeatOptimization.ipynb. The first one contains everything up to the sensitivity, whereas the second one only contains the optimization. This is done for readability, as the files would otherwise become incredibly large. 
-
-We have created some helper functions and added those to helper.py, which is already included in both the notebooks. 
-
-We were not able to run the sobol analysis in the jupyter notebook environment, therefore we have made a python file that runs the sobol analysis, with no policies and 25 policies and stores the data. These can be easily run in the command line it python3 is added to your PATH:
-
-> python in path (works on most OS's)
-```shell
-$ python3 /path/to/sobol.py
-```
-
-> python not in path (windows)
-```shel
-$ "/path/to/Python/Python38/python.exe" /path/to/sobol.py
-```
-
-In this same way it is possible to run the 10pol10000scen.py file. This file runs the model with Monte Carlo sampling for 10 policies with each 10.000 scenarios. 
-
-We also created our own problem definitions, but also kept the ones given. We left the given file (problem_formulation.py) in this folder, but added everything in it to our own problem formulation file (ProblemFormulationSelf.py). This file is also called in all our noteobooks and is used to get the problem definitions we want. 
-
-All data that we generate is saved in the ./final assignment/data/exp/ folder. Exp is in this case short for experiments, as the experiment data is stored there. Figures are stored in ./final assignment/Figures/, and tables are stored in ./final assignment/Tables/.  
-
-All other data in /data/ and all other python files were given and are used by the model to run correctly.
-
-#
