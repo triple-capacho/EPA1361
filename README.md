@@ -10,9 +10,7 @@ Supriya Krishnan
 
 ## How to
 
-* The two main files to be used are Exploration.ipynb and Optimization.ipynb. 
-**  Exploration.ipynb contains open explorations, scenario discovery and sensitivity analysis;
-**  Optimization.ipynb contains epsilon-testing, MORDM for average scenarios and MORDM for worst scenarios.
+* The two main files to be used are Exploration.ipynb and Optimization.ipynb: Exploration.ipynb contains open explorations, scenario discovery and sensitivity analysis; Optimization.ipynb contains epsilon-testing, MORDM for average scenarios and MORDM for worst scenarios.
 
 * helper.py has some functions created by us and it is already included in both the notebooks. 
 
@@ -32,9 +30,9 @@ In this same way it is possible to run the 10pol10000scen.py file. This file run
 
 * We also created our own problem definitions, but also kept the ones given. We left the given file (problem_formulation.py), but added everything in it to our own problem formulation file (ProblemFormulationSelf.py). This file is also called in all our noteobooks and is used to get the problem definitions we want. 
 
-* All the experiment data that we generate are saved in the ./final assignment/data/exp/. folder;
-* Figures are stored in ./final assignment/Figures/;
-* Tables are stored in ./final assignment/Tables/.  
+* All the experiment data that we generate are saved in the ./final assignment/data/exp/. folder
+* Figures are stored in ./final assignment/Figures/
+* Tables are stored in ./final assignment/Tables/  
 
 All other data in /data/ and all other python files were given and are used by the model to run correctly.
 
@@ -47,10 +45,10 @@ EPA1361
 │
 ├───final assignment
 │   │   .gitattributes
-│   │   50pol10000scen.py
+│   │   10pol10000scen.py
 │   │   dike_model_function.py
-│   │   FinalRunNeat.ipynb
-│   │   FinalRunNeatOptimization.ipynb
+│   │   Exploration.ipynb
+│   │   Optimization.ipynb
 │   │   funs_dikes.py
 │   │   funs_economy.py
 │   │   funs_generate_network.py
@@ -58,7 +56,6 @@ EPA1361
 │   │   helper.py
 │   │   ProblemFormulationSelf.py
 │   │   problem_formulation.py
-│   │   README.md
 │   │   sobol.py
 │   │   __init__.py
 │   │
@@ -69,7 +66,7 @@ EPA1361
 │   │   │   rfr_strategies.xlsx
 │   │   │
 │   │   ├───exp
-│   │   │       200Scenario_20Policy.tar.gz
+│   │   │       200Scenario_20Policy.tar.gz 
 │   │   │       500Scenario_NoPolicy.tar.gz
 │   │   │       a4-5_10000nfemoea
 │   │   │       baseRequest-80years.tar.gz
