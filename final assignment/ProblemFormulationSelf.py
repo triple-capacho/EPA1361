@@ -2,7 +2,10 @@
 """
 Created on Fri 2020-06-12 13:00
 
-@author: Martijn Ras (Group 15)
+extension of the given problemformulation
+
+@author: ciullo
+@co-author: Martijn Ras (Group 15)
 """
 from ema_workbench import (Model, CategoricalParameter,
                            ScalarOutcome, IntegerParameter, RealParameter)
